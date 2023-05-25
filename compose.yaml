@@ -1,0 +1,38 @@
+version: '3.9'
+services:
+  train:
+    build:
+      context: .
+      dockerfile: train.Dockerfile
+    runtime: nvidia
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    image: train
+    container_name: train
+    volumes:
+      - .:/workspace
+    stdin_open: true
+    tty: true
+  infer:
+    build:
+      context: .
+      dockerfile: infer.Dockerfile
+    runtime: nvidia
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    image: infer
+    container_name: infer
+    volumes:
+      - .:/workspace
+    stdin_open: true
+    tty: true

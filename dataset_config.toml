@@ -1,0 +1,6 @@
+[general]
+[[datasets]]
+[[datasets.subsets]]
+image_dir = '/workspace/images'
+caption_extension = '.txt'
+num_repeats = 2
