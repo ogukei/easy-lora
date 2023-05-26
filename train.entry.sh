@@ -36,7 +36,6 @@ accelerate launch --num_cpu_threads_per_process 1 train_network.py \
   --caption_dropout_rate=0.05 \
   --save_model_as=safetensors \
   --clip_skip=2 \
-  --seed=42 \
   --color_aug \
   --xformers \
   --mixed_precision=fp16 \
