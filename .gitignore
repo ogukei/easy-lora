@@ -1,5 +1,8 @@
 
 /.cache/
+/.images/
+/.model/
+
 /output/
 /model/
 /images/

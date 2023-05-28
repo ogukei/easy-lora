@@ -62,9 +62,18 @@ RUN source activate conda && \
 RUN source activate conda && \
   pip install triton==2.0.0
 
+# additional libraries
+USER root
+RUN apt-get install -y unzip
+USER $USERNAME
+
+# additional scripts
+COPY --chown=$USERNAME download_images.sh .
+RUN chmod +x download_images.sh
+
 # entrypoint
 WORKDIR /app/sd-scripts
-COPY --chown=$USERNAME train.entry.sh .
-RUN chmod +x train.entry.sh
+COPY --chown=$USERNAME entrypoint.sh .
+RUN chmod +x entrypoint.sh
 
-ENTRYPOINT ["/bin/bash", "-c", "./train.entry.sh"]
+ENTRYPOINT ["./entrypoint.sh"]

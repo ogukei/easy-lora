@@ -3,7 +3,7 @@ services:
   train:
     build:
       context: .
-      dockerfile: train.Dockerfile
+      dockerfile: Dockerfile
     runtime: nvidia
     deploy:
       resources:
@@ -12,27 +12,18 @@ services:
             - driver: nvidia
               count: all
               capabilities: [gpu]
-    image: train
-    container_name: train
+    image: easy-lora-train
+    container_name: easy-lora-train
     volumes:
       - .:/workspace
     stdin_open: true
     tty: true
-  infer:
-    build:
-      context: .
-      dockerfile: infer.Dockerfile
-    runtime: nvidia
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
-    image: infer
-    container_name: infer
+  download_images:
+    image: easy-lora-train
+    container_name: download_images
     volumes:
       - .:/workspace
+    entrypoint:
+      - ./download_images.sh
     stdin_open: true
     tty: true

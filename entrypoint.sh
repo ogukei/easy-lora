@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Usage
+# ./entrypoint.sh <model_name> <output_name>
+
 export BUILD_HF_HOME=$HF_HOME
 export HF_HOME=/workspace/.cache/huggingface
 
@@ -7,17 +10,35 @@ export HF_HOME=/workspace/.cache/huggingface
 mkdir -p "$HF_HOME/accelerate"
 cp "$BUILD_HF_HOME/accelerate/default_config.yaml" "$HF_HOME/accelerate"
 
-#
+# the output directory for a LoRA model
 mkdir -p /workspace/output
 
-export MODEL_NAME_OR_PATH=`realpath /workspace/model/*.safetensors`
+# model name such as `runwayml/stable-diffusion-v1-5`
+# also accepts a path to model file
+MODEL_NAME_OR_PATH="$1"
+# try to use `model/*.safetensors` if the argument not specified
+if [ -z "$MODEL_NAME_OR_PATH" ]; then
+  MODEL_PATH=`echo /workspace/model/*.safetensors`
+  if [ ! -f "$MODEL_PATH" ]; then
+    echo -e "Error: model/*.safetensors does not exist"
+    exit 1
+  fi
+  MODEL_NAME_OR_PATH="$MODEL_PATH"
+fi
+
+# output name without file extension
+# the filename defaults to `output/lora.safetensors`
+OUTPUT_NAME="$2"
+if [ -z "$OUTPUT_NAME" ]; then
+  OUTPUT_NAME="lora"
+fi
 
 source activate conda
 
 accelerate launch --num_cpu_threads_per_process 1 train_network.py \
   --pretrained_model_name_or_path="$MODEL_NAME_OR_PATH" \
   --output_dir="/workspace/output" \
-  --output_name=model \
+  --output_name="$OUTPUT_NAME" \
   --dataset_config="/workspace/dataset_config.toml" \
   --train_batch_size=1 \
   --max_train_epochs=5 \
@@ -36,6 +57,7 @@ accelerate launch --num_cpu_threads_per_process 1 train_network.py \
   --caption_dropout_rate=0.05 \
   --save_model_as=safetensors \
   --clip_skip=2 \
+  --seed=42 \
   --color_aug \
   --xformers \
   --mixed_precision=fp16 \
