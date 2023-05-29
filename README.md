@@ -53,6 +53,8 @@ docker compose --profile auto up --build
     * Settings > Stable Diffusion > SD VAE
 1. Apply settings
 1. Move to the txt2img tab
+1. Restart the Docker container
+    * Enter ^C to terminate the console
 1. Enter the prompt below
     * `(best quality, masterpiece:1.2), zunko, 1girl, <lora:zunko:1>`
 1. Enter the negative prompt below
