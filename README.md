@@ -76,3 +76,7 @@ Used embeddings: EasyNegative [119b]
 * The images of Tohoku Zunko are provided as the guideline below
     * https://zunko.jp/guideline.html
 
+## Links
+
+* kohya-ss/sd-scripts setup tutorial video (in Japanese)
+    * https://www.youtube.com/watch?v=N1tXVR9lplM
