@@ -4,7 +4,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    runtime: nvidia
     deploy:
       resources:
         reservations:
